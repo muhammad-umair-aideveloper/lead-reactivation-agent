@@ -1,0 +1,104 @@
+{
+    "entries": [
+        {
+            "id": "product_overview",
+            "category": "product",
+            "text": "We offer premium business solutions including consulting, digital transformation, and managed services. Our clients typically see 30% improvement in operational efficiency within the first quarter."
+        },
+        {
+            "id": "pricing_general",
+            "category": "pricing",
+            "text": "Our pricing is customized based on business size and needs. We offer flexible monthly plans starting from competitive rates with no long-term contracts required. Volume discounts available."
+        },
+        {
+            "id": "objection_too_expensive",
+            "category": "objection_handling",
+            "text": "When a lead says it's too expensive, emphasize ROI and value. Mention our money-back guarantee and flexible payment plans. Share case studies showing 3x return on investment within 6 months."
+        },
+        {
+            "id": "objection_not_right_time",
+            "category": "objection_handling",
+            "text": "When a lead says it's not the right time, acknowledge their situation and offer to schedule a future follow-up. Mention limited-time offers or seasonal promotions that create gentle urgency."
+        },
+        {
+            "id": "objection_using_competitor",
+            "category": "objection_handling",
+            "text": "When a lead is using a competitor, don't badmouth the competition. Instead, highlight our unique differentiators: 24/7 support, dedicated account manager, and proprietary technology stack."
+        },
+        {
+            "id": "objection_need_approval",
+            "category": "objection_handling",
+            "text": "When a lead needs internal approval, offer to provide a business case document or ROI calculator they can share with decision-makers. Offer to join a call with their team."
+        },
+        {
+            "id": "objection_bad_experience",
+            "category": "objection_handling",
+            "text": "When a lead had a bad past experience, sincerely apologize and explain improvements made since then. Offer a risk-free trial or pilot program to rebuild trust."
+        },
+        {
+            "id": "objection_no_budget",
+            "category": "objection_handling",
+            "text": "When a lead has no budget, discuss payment flexibility and phased implementation. Show how our solution can actually reduce costs in other areas, making it budget-neutral."
+        },
+        {
+            "id": "objection_too_complex",
+            "category": "objection_handling",
+            "text": "When a lead thinks the solution is too complex, emphasize our white-glove onboarding process, dedicated support team, and intuitive interface. Offer a personalized demo."
+        },
+        {
+            "id": "objection_happy_with_current",
+            "category": "objection_handling",
+            "text": "When a lead is happy with their current solution, respect their satisfaction but plant seeds about future needs. Mention emerging trends and how our platform is positioned for them."
+        },
+        {
+            "id": "brand_voice",
+            "category": "brand",
+            "text": "Our brand voice is professional yet approachable. We avoid aggressive sales tactics, pressure language, or false urgency. Every message should feel like it's from a trusted advisor, not a salesperson."
+        },
+        {
+            "id": "compliance_sms",
+            "category": "compliance",
+            "text": "All SMS messages must comply with TCPA regulations. Every message must provide an opt-out mechanism. Never send messages outside business hours (9 AM - 5 PM local time). Maximum one message per lead per day."
+        },
+        {
+            "id": "follow_up_best_practices",
+            "category": "strategy",
+            "text": "Best follow-up cadence: first touch at day 1, second touch at day 3, third touch at day 7. After 3 touches with no response, escalate to human review. Never send more than 3 unreturned messages."
+        },
+        {
+            "id": "high_intent_signals",
+            "category": "strategy",
+            "text": "High intent signals: visited pricing page, downloaded whitepaper, attended webinar, requested demo, engaged with email campaigns. These leads should receive priority follow-up within 24 hours."
+        },
+        {
+            "id": "lead_scoring_criteria",
+            "category": "strategy",
+            "text": "Lead scoring factors: recency of interaction (40%), engagement level (25%), company size (15%), industry fit (10%), and source quality (10%). Leads scoring above 70 are high priority."
+        },
+        {
+            "id": "seasonal_promotions",
+            "category": "offers",
+            "text": "Current promotions: Q1 early bird discount (15% off annual plans), free onboarding for new clients, and extended 60-day trial for enterprise accounts. Use these as re-engagement hooks."
+        },
+        {
+            "id": "success_story_tech",
+            "category": "testimonial",
+            "text": "Case study: TechCorp reduced operational costs by 40% and increased team productivity by 25% within 3 months of implementing our solution. Their CTO called it a game-changer."
+        },
+        {
+            "id": "success_story_retail",
+            "category": "testimonial",
+            "text": "Case study: RetailMax saw a 50% increase in customer retention and 35% growth in repeat purchases after deploying our customer engagement platform."
+        },
+        {
+            "id": "objection_data_security",
+            "category": "objection_handling",
+            "text": "When a lead is concerned about data security, highlight our SOC 2 Type II certification, GDPR compliance, end-to-end encryption, and annual third-party security audits."
+        },
+        {
+            "id": "objection_integration",
+            "category": "objection_handling",
+            "text": "When a lead is worried about integration complexity, mention our pre-built connectors for 200+ tools, REST API, dedicated integration support team, and typical 2-week setup time."
+        }
+    ]
+}

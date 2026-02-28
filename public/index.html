@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Lead Reactivation Agent — Enterprise AI Dashboard for lead scoring, SMS automation, and analytics." />
+  <title>Lead Reactivation Agent — Enterprise Dashboard</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- ═══ Header ═══ -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon"><i class="fas fa-robot"></i></div>
+      <div>
+        <div class="logo-title">Lead Reactivation Agent</div>
+        <div class="logo-subtitle">Enterprise v2.0</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        <span id="statusText">Connecting...</span>
+      </div>
+      <button class="btn btn-secondary" id="refreshBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+      <button class="btn btn-secondary" id="exportBtn"><i class="fas fa-download"></i> Export</button>
+    </div>
+  </header>
+
+  <!-- ═══ Upload Section ═══ -->
+  <section class="upload-section">
+    <div class="upload-zone" id="uploadZone">
+      <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+      <h2>Upload Lead CSV</h2>
+      <p>Drag & drop or click to select a CSV file for AI analysis</p>
+      <button class="btn btn-primary upload-btn" id="uploadBtn"><i class="fas fa-file-csv"></i> Choose File</button>
+      <input type="file" id="fileInput" accept=".csv" hidden />
+    </div>
+    <div class="upload-progress" id="uploadProgress" style="display:none">
+      <div class="progress-content">
+        <div class="spinner"></div><span id="uploadStatusText">Processing...</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Tab Navigation ═══ -->
+  <nav class="tab-nav" id="tabNav">
+    <button class="tab-btn active" data-tab="overview"><i class="fas fa-chart-pie"></i> Overview</button>
+    <button class="tab-btn" data-tab="escalations"><i class="fas fa-exclamation-triangle"></i> HITL Escalations</button>
+    <button class="tab-btn" data-tab="costs"><i class="fas fa-dollar-sign"></i> Cost Analytics</button>
+    <button class="tab-btn" data-tab="eval"><i class="fas fa-gavel"></i> Eval Suite</button>
+    <button class="tab-btn" data-tab="traces"><i class="fas fa-brain"></i> AI Traces</button>
+    <button class="tab-btn" data-tab="system"><i class="fas fa-server"></i> System</button>
+  </nav>
+
+  <!-- ═══ TAB: Overview ═══ -->
+  <div class="tab-content active" id="tab-overview">
+    <!-- Filters -->
+    <section class="filters-section">
+      <div class="filter-group">
+        <label><i class="fas fa-filter"></i> Intent</label>
+        <select id="filterIntent">
+          <option value="">All Intents</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="not_interested">Not Interested</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label><i class="fas fa-sitemap"></i> Source</label>
+        <select id="filterSource">
+          <option value="">All Sources</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label><i class="fas fa-flag"></i> State</label>
+        <select id="filterState">
+          <option value="">All States</option>
+          <option value="idle">Idle</option>
+          <option value="contacted">Contacted</option>
+          <option value="replied">Replied</option>
+          <option value="escalated">Escalated</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label><i class="fas fa-calendar"></i> From</label>
+        <input type="date" id="filterDateFrom" />
+      </div>
+      <div class="filter-group">
+        <label><i class="fas fa-calendar-check"></i> To</label>
+        <input type="date" id="filterDateTo" />
+      </div>
+      <button class="btn btn-secondary filter-reset" id="filterReset"><i class="fas fa-undo"></i> Reset</button>
+    </section>
+
+    <!-- KPI Cards Row 1 -->
+    <section class="kpi-section">
+      <div class="kpi-card kpi-total">
+        <div class="kpi-icon"><i class="fas fa-users"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiTotalLeads">0</div>
+          <div class="kpi-label">Total Leads</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-sent">
+        <div class="kpi-icon"><i class="fas fa-paper-plane"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiMessagesSent">0</div>
+          <div class="kpi-label">Messages Sent</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-replies">
+        <div class="kpi-icon"><i class="fas fa-reply"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiReplies">0</div>
+          <div class="kpi-label">Replies</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-rate">
+        <div class="kpi-icon"><i class="fas fa-percentage"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiReplyRate">0%</div>
+          <div class="kpi-label">Reply Rate</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-escalated">
+        <div class="kpi-icon"><i class="fas fa-exclamation-circle"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiEscalated">0</div>
+          <div class="kpi-label">Escalated</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KPI Cards Row 2 — Cost & Conversion -->
+    <section class="kpi-section">
+      <div class="kpi-card kpi-cost">
+        <div class="kpi-icon"><i class="fas fa-coins"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiTotalCost">$0</div>
+          <div class="kpi-label">Total Cost</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-cpl">
+        <div class="kpi-icon"><i class="fas fa-user-tag"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiCostPerLead">$0</div>
+          <div class="kpi-label">Cost / Lead</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-cpc">
+        <div class="kpi-icon"><i class="fas fa-bullseye"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiCostPerConversion">$0</div>
+          <div class="kpi-label">Cost / Conversion</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-conv">
+        <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiConversionRate">0%</div>
+          <div class="kpi-label">Conversion Rate</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-contact">
+        <div class="kpi-icon"><i class="fas fa-phone-alt"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="kpiContactRate">0%</div>
+          <div class="kpi-label">Contact Rate</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="charts-section">
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-pie"></i> Intent Breakdown</h3>
+        <div class="chart-container"><canvas id="intentChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-bar"></i> State Pipeline</h3>
+        <div class="chart-container"><canvas id="funnelChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-area"></i> Source Distribution</h3>
+        <div class="chart-container"><canvas id="sourceChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-bar"></i> Confidence Distribution</h3>
+        <div class="chart-container"><canvas id="confidenceChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- Leads Table -->
+    <section class="table-section">
+      <div class="table-header">
+        <h3><i class="fas fa-table"></i> Lead Pipeline</h3>
+        <span class="table-meta" id="tableCount">0 leads</span>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Source</th>
+              <th>Last Contact</th>
+              <th>Intent</th>
+              <th>Confidence</th>
+              <th>State</th>
+              <th>Provider</th>
+              <th>SMS Preview</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody">
+            <tr>
+              <td colspan="10" class="empty-row">No leads found. Upload a CSV to get started.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </section>
+  </div>
+
+  <!-- ═══ TAB: HITL Escalations ═══ -->
+  <div class="tab-content" id="tab-escalations">
+    <section class="kpi-section">
+      <div class="kpi-card kpi-escalated">
+        <div class="kpi-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="hitlPending">0</div>
+          <div class="kpi-label">Pending Review</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-replies">
+        <div class="kpi-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="hitlResolved">0</div>
+          <div class="kpi-label">Resolved</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-rate">
+        <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="hitlAvgConfidence">0</div>
+          <div class="kpi-label">Avg Confidence</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-total">
+        <div class="kpi-icon"><i class="fas fa-layer-group"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="hitlTotal">0</div>
+          <div class="kpi-label">Total Escalations</div>
+        </div>
+      </div>
+    </section>
+    <section class="table-section">
+      <div class="table-header">
+        <h3><i class="fas fa-exclamation-triangle"></i> Escalation Queue</h3>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Lead</th>
+              <th>Reason</th>
+              <th>Confidence</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="escalationsTableBody">
+            <tr>
+              <td colspan="7" class="empty-row">No escalations found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ TAB: Cost Analytics ═══ -->
+  <div class="tab-content" id="tab-costs">
+    <section class="kpi-section">
+      <div class="kpi-card kpi-cost">
+        <div class="kpi-icon"><i class="fas fa-money-bill-wave"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="costTotal">$0</div>
+          <div class="kpi-label">Total Spend</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-sent">
+        <div class="kpi-icon"><i class="fas fa-sms"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="costSms">$0</div>
+          <div class="kpi-label">SMS Costs</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-rate">
+        <div class="kpi-icon"><i class="fas fa-brain"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="costAi">$0</div>
+          <div class="kpi-label">AI Costs</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-total">
+        <div class="kpi-icon"><i class="fas fa-receipt"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="costEvents">0</div>
+          <div class="kpi-label">Total Events</div>
+        </div>
+      </div>
+    </section>
+    <section class="charts-section">
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-pie"></i> Cost by Provider</h3>
+        <div class="chart-container"><canvas id="costProviderChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-bar"></i> Top Cost per Lead</h3>
+        <div class="chart-container"><canvas id="costPerLeadChart"></canvas></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ TAB: Eval Suite ═══ -->
+  <div class="tab-content" id="tab-eval">
+    <section class="kpi-section">
+      <div class="kpi-card kpi-replies">
+        <div class="kpi-icon"><i class="fas fa-bullseye"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="evalIntentAccuracy">—</div>
+          <div class="kpi-label">Intent Accuracy</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-rate">
+        <div class="kpi-icon"><i class="fas fa-star"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="evalAvgQuality">—</div>
+          <div class="kpi-label">Avg Quality</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-sent">
+        <div class="kpi-icon"><i class="fas fa-music"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="evalAvgTone">—</div>
+          <div class="kpi-label">Avg Tone Score</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-total">
+        <div class="kpi-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="evalInjectionRes">—</div>
+          <div class="kpi-label">Injection Resist %</div>
+        </div>
+      </div>
+    </section>
+    <div style="padding: 0 32px 20px; position:relative; z-index:1;">
+      <button class="btn btn-primary" id="runEvalBtn"><i class="fas fa-play"></i> Run Evaluation</button>
+      <span class="table-meta" id="evalRunInfo" style="margin-left:16px;"></span>
+    </div>
+    <section class="table-section">
+      <div class="table-header">
+        <h3><i class="fas fa-gavel"></i> Latest Eval Results</h3>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Scenario</th>
+              <th>Expected</th>
+              <th>Actual</th>
+              <th>Match</th>
+              <th>Confidence</th>
+              <th>Tone</th>
+              <th>Quality</th>
+              <th>Inject Resist</th>
+            </tr>
+          </thead>
+          <tbody id="evalTableBody">
+            <tr>
+              <td colspan="9" class="empty-row">No evaluation results. Click "Run Evaluation" to start.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ TAB: AI Traces ═══ -->
+  <div class="tab-content" id="tab-traces">
+    <section class="table-section">
+      <div class="table-header">
+        <h3><i class="fas fa-brain"></i> Reasoning Traces</h3>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Trace ID</th>
+              <th>Lead</th>
+              <th>Provider</th>
+              <th>Confidence</th>
+              <th>Decision</th>
+              <th>Duration</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody id="tracesTableBody">
+            <tr>
+              <td colspan="7" class="empty-row">No reasoning traces found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" id="tracesPagination"></div>
+    </section>
+  </div>
+
+  <!-- ═══ TAB: System ═══ -->
+  <div class="tab-content" id="tab-system">
+    <section class="kpi-section">
+      <div class="kpi-card kpi-replies">
+        <div class="kpi-icon"><i class="fas fa-heartbeat"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="sysUptime">—</div>
+          <div class="kpi-label">Uptime</div>
+        </div>
+      </div>
+      <div class="kpi-card kpi-sent">
+        <div class="kpi-icon"><i class="fas fa-server"></i></div>
+        <div class="kpi-data">
+          <div class="kpi-value" id="sysQueueMode">—</div>
+          <div class="kpi-label">Queue Mode</div>
+        </div>
+      </div>
+    </section>
+    <section class="charts-section">
+      <div class="chart-card" style="grid-column: span 2">
+        <h3><i class="fas fa-heartbeat"></i> Provider Health</h3>
+        <div id="providerHealthContent" style="font-size:14px; color: var(--text-secondary); padding: 12px 0;">
+          Loading...</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ Modal ═══ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="leadModal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Lead Detail</h3>
+        <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

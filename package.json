@@ -1,0 +1,42 @@
+{
+  "name": "lead-reactivation-agent",
+  "version": "2.0.0",
+  "description": "Enterprise Autonomous AI Agent for lead reactivation — Gemini + Twilio SMS with RAG, HITL, and multi-LLM failover",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "eval": "node src/eval/runEval.js",
+    "migrate": "node src/data/migrate.js"
+  },
+  "keywords": [
+    "ai-agent",
+    "lead-reactivation",
+    "gemini",
+    "twilio",
+    "sms",
+    "rag",
+    "bullmq"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@google/generative-ai": "^0.21.0",
+    "better-sqlite3": "^11.7.0",
+    "bullmq": "^5.34.0",
+    "cors": "^2.8.5",
+    "csv-parse": "^5.6.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "ioredis": "^5.4.2",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "twilio": "^5.4.3",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
